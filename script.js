@@ -1,56 +1,43 @@
-function getComputerChoice() {
-    const choices = ["rock", "paper", "scissors"]
-    const choice = Math.floor(Math.random() * choices.length)
-    return choices[choice]
+const cpuChoice = document.getElementById('computer-choice')
+const usrChoice = document.getElementById('user-choice')
+const showResult = document.getElementById('result')
+
+let usr
+let cpu
+let result
+
+// Listen for clicks on all three buttons. This queries for buttons, so
+// any buttons made later will be included. We could have added an id or class to
+// the buttons to specify just these.
+const usrChoices = document.querySelectorAll('button')
+
+usrChoices.forEach((possibleChoice) =>
+    possibleChoice.addEventListener('click', (e) => {
+        usr = e.target.id
+        usrChoice.innerHTML = usr
+        getCpuChoice()
+        getResult()
+    })
+)
+
+function getCpuChoice() {
+    const randomNumber = Math.floor(Math.random() * 3)
+    const choices = ['rock', 'paper', 'scissors']
+    cpu = choices[randomNumber]
+    cpuChoice.innerHTML = cpu
 }
 
-function getHumanChoice() {
-    while (true) {
-        const choice = prompt("Enter your choice:").toLowerCase()
-
-        if (["rock", "paper", "scissors"].includes(choice)) {
-            return choice
-        }
-    }
-}
-
-function playRound(humanChoice, computerChoice) {
-    if (humanChoice == computerChoice) {
-        return [0, 0]
-    }
-    if (humanChoice == "rock" && computerChoice == "scissors") {
-        return [1, 0]
-    }
-    if (humanChoice == "paper" && computerChoice == "rock") {
-        return [1, 0]
-    }
-    if (humanChoice == "scissors" && computerChoice == "paper") {
-        return [1, 0]
-    }
-    return [0, 1]
-}
-
-function playGame() {
-    let humanScore = 0
-    let computerScore = 0
-    let humanChoice = ""
-    let computerChoice = ""
-    let round = []
-    for (let i = 0; i < 5; i++) {
-        humanChoice = getHumanChoice()
-        console.log("human: " + humanChoice)
-        computerChoice = getComputerChoice()
-        console.log("comp: " + computerChoice + "\n")
-        round = playRound(humanChoice, computerChoice)
-        humanScore += round[0]
-        computerScore += round[1]
-    }
-    if (humanScore == computerScore) {
-        console.log("tie")
-    } else if (humanScore > computerScore) {
-        console.log("human wins")
+function getResult() {
+    if (usr == cpu) {
+        result = 'tie'
+    } else if (
+        (usr == 'rock' && cpu == 'scissors') ||
+        (usr == 'paper' && cpu == 'rock') ||
+        (usr == 'scissors' && cpu == 'paper')
+    ) {
+        result = 'You win!'
     } else {
-        console.log("computer wins")
+        result = 'Sorry, you lose!'
     }
+    showResult.innerHTML = result
 }
-playGame()
